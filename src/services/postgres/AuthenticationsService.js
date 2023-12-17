@@ -10,7 +10,7 @@ const config = {
   host: process.env.PGHOST,
   // this object will be passed to the TLSSocket constructor
   ssl: {
-    rejectUnauthorized: true,
+    rejectUnauthorized: false,
     ca: readFileSync('./ca-certificate.crt').toString(),
   },
 }
