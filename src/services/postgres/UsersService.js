@@ -6,6 +6,8 @@ const NotFoundError = require('../../exceptions/NotFoundError');
 const AuthenticationError = require('../../exceptions/AuthenticationError');
 const {use} = require("bcrypt/promises");
 
+
+
 class UsersService {
     constructor() {
         this._pool = new Pool();
