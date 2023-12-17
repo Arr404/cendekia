@@ -1,0 +1,102 @@
+openapi: 3.0.3
+info:
+  title: Cendekiaone
+  description: Cendekiaone
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:5000'
+paths:
+  /register:
+    post:
+      tags:
+        - Authentication
+      description: Register new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: lemon
+                username:
+                  type: string
+                  example: lemon
+                password:
+                  type: string
+                  example: hoak
+                email:
+                  type: string
+                  example: lemon@lemon.com
+              required:
+                - name
+                - username
+                - password
+                - email
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: User berhasil ditambahkan
+                  data:
+                    type: object
+                    properties:
+                      userId:
+                        type: string
+                        example: user-xnaQZ_detpfmxITF
+  /login:
+    post:
+      tags:
+        - Authentication
+      description: Authenticate user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: hoak
+                email:
+                  type: string
+                  example: lemon@lemon.com
+              required:
+                - password
+                - email
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Authentication berhasil ditambahkan
+                  data:
+                    type: object
+                    properties:
+                      accessToken:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFjYy1kLU9qMEo5NHc1dUlMaFIyIiwiaWF0IjoxNzAyNzc2OTAxfQ.ynQH6ktr9PaMkW821nH4ySQmU8B4dPp0ZP3fPEBZ8YA
+                      refreshToken:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFjYy1kLU9qMEo5NHc1dUlMaFIyIiwiaWF0IjoxNzAyNzc2OTAxfQ.-U7i9UjZeYrgBJEGLb6q3nCk9XUXynSTNfT6rRTEgwg
+
