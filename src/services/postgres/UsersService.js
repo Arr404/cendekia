@@ -29,16 +29,16 @@ class UsersService {
 
         const id = `user-${nanoid(16)}`;
         const currentTime = new Date().toLocaleString('en-ID', {timeZone: 'Asia/Jakarta'});
-        const picture = '';
-        const bio = '';
+        const picture = null;
+        const bio = null;
         const accountId = resultAccount.rows[0].id.toString()
         const query = {
-            text: 'INSERT INTO "user" VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
-            values: [id, name, picture, username, bio, accountId],
+            text: 'INSERT INTO "user" VALUES ($1, $2, $3, $4, $5, $6,$7) RETURNING id',
+            values: [id, name, picture, username, bio, accountId,currentTime],
         };
         const result = await this._pool.query(query);
         // Process the result or return it as needed
-        if (!result.rows.length) {
+        if (!result) {
             throw new InvariantError('User gagal ditambahkan');
         }
         return result.rows[0].id;
@@ -66,7 +66,7 @@ class UsersService {
 
         const result = await this._pool.query(query);
 
-        if (!result.rows.length) {
+        if (!result) {
             throw new NotFoundError('User tidak ditemukan');
         }
 
@@ -80,7 +80,7 @@ class UsersService {
         };
 
         const result = await this._pool.query(query);
-        if (!result.rows.length) {
+        if (!result) {
             throw new AuthenticationError('Kredensial yang Anda berikan salah');
         }
 
@@ -102,7 +102,7 @@ class UsersService {
         }
         const result = await this._pool.query(query)
 
-        if (!result.rows.length) {
+        if (!result) {
             throw new NotFoundError('User tidak ditemukan');
         }
 
@@ -130,7 +130,7 @@ class UsersService {
         }
         const result = await this._pool.query(queryUpdate);
 
-        if (!result.rows.length) {
+        if (!result) {
             throw new NotFoundError('Gagal memperbarui user. user tidak ditemukan');
         }
     }

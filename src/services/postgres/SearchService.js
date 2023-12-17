@@ -12,7 +12,7 @@ class SearchService{
             values  :[search,page,itemsPerPage]
         }
         const result = await this._pool.query(query);
-        if (!result.rows.length) {
+        if (!result) {
             throw new InvariantError('User tidak ditemukan');
         }
         return result

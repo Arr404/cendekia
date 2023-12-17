@@ -32,7 +32,7 @@ class PostService {
             values: [userId, page, itemsPerPage]
         };
         const result = await this._pool.query(queryFollowPost);
-        if (!result.rows.length) {
+        if (!result) {
             throw new NotFoundError('Post tidak ada');
         }
 
@@ -43,12 +43,12 @@ class PostService {
     async getPostExplore({page, itemsPerPage}) {
         const queryExplorePost = {
             text: 'SELECT * FROM posts ' +
-                  'ORDER BY "createdAT" DESC ' +
+                  'ORDER BY "createdAt" DESC ' +
                   'LIMIT $2 OFFSET ($1 - 1) * $2',
             values: [page, itemsPerPage]
         }
         const result = await this._pool.query(queryExplorePost)
-        if (!result.rows.length) {
+        if (!result) {
             throw new NotFoundError('Post tidak ditemukan');
         }
 
@@ -57,14 +57,19 @@ class PostService {
 
     async addPost({accountId, description, kategori, subCategory, picture}) {
         const userId = await this.getUserIdFromAccountId(accountId)
-        const id = 'postID-${nanoid(16)}'
+        const id = `postID-${nanoid(16)}`
         const createdAt = new Date().toLocaleString('en-ID', {timeZone: 'Asia/Jakarta'})
 
         const queryAddPage = {
             text: 'INSERT INTO posts VALUES($1,$2,$3,$4,$5,$6,$7)',
             values: [id, userId, description, kategori, subCategory, picture, createdAt]
         }
-        await this._pool.query(queryAddPage);
+        const post = await this._pool.query(queryAddPage);
+        console.log(post)
+        if (!post) {
+            throw new InvariantError('post gagal ditambahkan');
+        }
+        return id
     }
 
     async updatePost({postId, accountId, description, kategori, subCategory, picture}) {
@@ -77,7 +82,7 @@ class PostService {
             values: [postId, userId, description, kategori, subCategory, picture, createdAt]
         }
         await this._pool.query(queryAddPage);
-        if (!result.rows.length) {
+        if (!result) {
             throw new NotFoundError('Gagal memperbarui post. post tidak ditemukan');
         }
     }
@@ -88,7 +93,7 @@ class PostService {
             values: [postId]
         }
         const result= await this._pool.query(queryDelete);
-        if (!result.rows.length) {
+        if (!result) {
             throw new NotFoundError('Gagal menghapus post. post tidak ditemukan');
         }
     }
@@ -107,7 +112,7 @@ class PostService {
             values: [postId,userId]
         }
         await this._pool.query(queryPostLike);
-        // if (!result.rows.length) {
+        // if (!result) {
         //     throw new NotFoundError('Gagal menglike post. post/user tidak ditemukan');
         // }
     }
@@ -118,7 +123,7 @@ class PostService {
             values: [postId,userId]
         }
         await this._pool.query(queryDeleteLike);
-        if (!result.rows.length) {
+        if (!result) {
             throw new NotFoundError('Gagal menghapus like post. post/user tidak ditemukan');
         }
     }
