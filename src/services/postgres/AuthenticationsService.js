@@ -1,23 +1,10 @@
 const { Pool } = require('pg');
 const InvariantError = require('../../exceptions/InvariantError');
 const {readFileSync} = require("fs");
-require('dotenv').config();
-const config = {
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  port: process.env.PGPORT,
-  database: process.env.PGDATABASE,
-  host: process.env.PGHOST,
-  // this object will be passed to the TLSSocket constructor
-  ssl: {
-    rejectUnauthorized: false,
-    ca: readFileSync('./ca-certificate.crt').toString(),
-  },
-}
 
 class AuthenticationsService {
   constructor() {
-    this._pool = new Pool(config);
+    this._pool = new Pool();
   }
 
   async addRefreshToken(token) {
